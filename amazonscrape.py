@@ -82,7 +82,14 @@ class my_class:
             if 'No results for' in str(result):
                 print('No results for:{}'.format(userInput.replace('+',' ')))
                 print('no result')
-                exit()        
+                exit()
+    def functions(page_nos):    
+        for i in range(page_nos+1)[2::1]:
+            soup = first_obj.get_content(headers,'https://www.amazon.in/s?k={userInput}&page={page_no}'.format(userInput= userInput,page_no=i))
+            first_obj.s_containers, first_obj.l_containers= [],[]
+            first_obj.store_content()
+            first_obj.scrap_data(s_containers,l_containers)
+
 #############################################################################################################################################
 ##                                      Execution starts here                                                                              ##
 #############################################################################################################################################
@@ -105,21 +112,10 @@ first_obj = my_class(url,soup,clean,s_containers,l_containers,userInput)
 soup = first_obj.get_content(headers, url)
 first_obj.result_check(soup)
 page_nos=int(first_obj.get_pageNos())
-thread_pages = round(page_nos/2)
-print(thread_pages)
 first_obj.store_content()
-
-
 # # fileob=open('scraped.json','w')                         #opening the file for the intial time in write mode to clear content if any content is present already
 # # fileob.close()
 # # fileobj=open('scraped.json','a')
 first_obj.scrap_data(s_containers,l_containers)  
-
-def functions(thread_pages):    
-    for i in range(page_nos+1)[2::1]:
-        soup = first_obj.get_content(headers,'https://www.amazon.in/s?k={userInput}&page={page_no}'.format(userInput= userInput,page_no=i))
-        first_obj.s_containers, first_obj.l_containers= [],[]
-        first_obj.store_content()
-        first_obj.scrap_data(s_containers,l_containers)
-
+functions(page_nos)
 # fileobj.close()
